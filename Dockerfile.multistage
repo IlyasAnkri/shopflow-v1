@@ -1,0 +1,32 @@
+# --- ÉTAPE 1 : L'ATELIER (Builder) ---
+FROM python:3.12-slim AS builder
+
+WORKDIR /app
+
+# Création d'un environnement virtuel dédié
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Installation des dépendances dans cet environnement
+COPY requirements.txt .
+RUN pip install --default-timeout=100 --no-cache-dir -r requirements.txt
+
+
+# --- ÉTAPE 2 : L'IMAGE FINALE (Production) ---
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# MAGIE DU MULTI-STAGE : On copie uniquement l'environnement virtuel prêt à l'emploi depuis l'atelier "builder"
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# On copie notre code source
+COPY main.py .
+
+# Sécurité (toujours !)
+RUN useradd -m appuser
+USER appuser
+
+# Lancement
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

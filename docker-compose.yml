@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: shopflow-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: shopflow_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - shopflow_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d shopflow_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.multistage
+    container_name: shopflow-api
+    restart: on-failure
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - shopflow_net
+
+  nginx:
+    image: nginx:alpine
+    container_name: shopflow-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    networks:
+      - shopflow_net
+
+networks:
+  shopflow_net:
+    driver: bridge
+
+volumes:
+  pgdata:
