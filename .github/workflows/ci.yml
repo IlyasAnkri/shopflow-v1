@@ -17,7 +17,7 @@ jobs:
       - name: Install and run Ruff
         run: |
           pip install ruff
-          run: ruff check . --ignore B008
+          ruff check . --ignore B008
       - name: Lint Dockerfile with Hadolint
         uses: hadolint/hadolint-action@v3.1.0
         with:
