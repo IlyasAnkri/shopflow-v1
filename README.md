@@ -1,3 +1,4 @@
+[![CI Pipeline](https://github.com/IlyasAnkri/shopflow-v1/actions/workflows/ci.yml/badge.svg)](https://github.com/IlyasAnkri/shopflow-v1/actions/workflows/ci.yml)
 # ShopFlow API 🛒
 
 Une API RESTful conteneurisée pour la gestion de commandes, orchestrée avec Docker Compose.
