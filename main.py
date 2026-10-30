@@ -1,9 +1,9 @@
 
 import os
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, Float
-from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from sqlalchemy import Column, Float, Integer, String, create_engine
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 # 1. Configuration de la connexion PostgreSQL
 # Il lit la variable d'environnement DATABASE_URL, ou utilise une valeur par défaut en local
