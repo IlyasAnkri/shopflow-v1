@@ -1,5 +1,5 @@
-
 import os
+
 from fastapi import Depends, FastAPI
 from pydantic import BaseModel
 from sqlalchemy import Column, Float, Integer, String, create_engine
