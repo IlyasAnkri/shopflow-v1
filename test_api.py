@@ -1,17 +1,19 @@
-import requests
+from fastapi.testclient import TestClient
+from main import app
 
-BASE_URL = "http://localhost/api/orders"
+client = TestClient(app)
+BASE_URL = "/api/orders"
 
 def test_create_order():
-    response = requests.post(BASE_URL, json={"product": "Serveur", "quantity": 1, "price": 1200.0})
+    response = client.post(BASE_URL, json={"product": "Serveur", "quantity": 1, "price": 1200.0})
     assert response.status_code == 200
     assert "id" in response.json()
 
 def test_get_orders():
-    response = requests.get(BASE_URL)
+    response = client.get(BASE_URL)
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 def test_create_invalid_order():
-    response = requests.post(BASE_URL, json={"product": "Câble", "quantity": "dix", "price": 15.0})
+    response = client.post(BASE_URL, json={"product": "Câble", "quantity": "dix", "price": 15.0})
     assert response.status_code == 422
