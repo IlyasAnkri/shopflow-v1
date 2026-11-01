@@ -22,6 +22,22 @@ pipeline {
             }
         }
 
+	stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'sonar-scanner'
+            }
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh '''
+                    ${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.projectKey=shopflow-backend \
+                    -Dsonar.sources=. \
+                    -Dsonar.python.coverage.reportPaths=reports/coverage.xml
+                    '''
+                }
+            }
+        }
+
         stage('Build image') {
             steps {
                 sh 'docker build -t shopflow-backend .'
