@@ -10,13 +10,13 @@ pipeline {
         }
 
         stage('Install & Test') {
-            steps {
-                sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install -r requirements.txt
-                pytest test_api.py --junitxml=reports/result.xml --cov=. --cov-report=xml:reports/coverage.xml
-                '''
+         steps {
+             sh '''
+             rm -rf venv
+             python3 -m venv venv
+             ./venv/bin/pip install -r requirements.txt
+             ./venv/bin/pytest test_api.py --junitxml=reports/result.xml --cov=. --cov-report=xml:reports/coverage.xml
+             '''
             }
         }
 
