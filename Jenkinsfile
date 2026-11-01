@@ -15,10 +15,11 @@ pipeline {
              rm -rf venv
              python3 -m venv venv
              ./venv/bin/pip install -r requirements.txt
+             export DATABASE_URL="sqlite:///:memory:"
              ./venv/bin/pytest test_api.py --junitxml=reports/result.xml --cov=. --cov-report=xml:reports/coverage.xml
              '''
-            }
-        }
+             }
+         }
 
         stage('Build image') {
             steps {
