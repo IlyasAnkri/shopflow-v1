@@ -9,24 +9,20 @@ pipeline {
             }
         }
 
-        stage('Install') {
+        stage('Install & Test') {
             steps {
-                // Installe les dépendances Python
-                sh 'pip install -r backend/requirements.txt'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                // Lance les tests avec Pytest
-                sh 'pytest backend/tests/ --junitxml=reports/result.xml'
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install -r requirements.txt
+                pytest test_api.py --junitxml=reports/result.xml
+                '''
             }
         }
 
         stage('Build image') {
             steps {
-                // Construit l'image Docker (grâce à notre configuration DooD)
-                sh 'docker build -t shopflow-backend ./backend'
+                sh 'docker build -t shopflow-backend .'
             }
         }
         
