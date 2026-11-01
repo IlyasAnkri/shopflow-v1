@@ -15,7 +15,7 @@ pipeline {
                 python3 -m venv venv
                 . venv/bin/activate
                 pip install -r requirements.txt
-                pytest test_api.py --junitxml=reports/result.xml
+                pytest test_api.py --junitxml=reports/result.xml --cov=. --cov-report=xml:reports/coverage.xml
                 '''
             }
         }
