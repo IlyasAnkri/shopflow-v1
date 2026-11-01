@@ -10,16 +10,17 @@ pipeline {
         }
 
         stage('Install & Test') {
-         steps {
-             sh '''
-             rm -rf venv
-             python3 -m venv venv
-             ./venv/bin/pip install -r requirements.txt
-             export DATABASE_URL="sqlite:///:memory:"
-             ./venv/bin/pytest test_api.py --junitxml=reports/result.xml --cov=. --cov-report=xml:reports/coverage.xml
-             '''
-             }
-         }
+            steps {
+                sh '''
+                rm -rf venv test.db
+                python3 -m venv venv
+                ./venv/bin/pip install -r requirements.txt
+                export DATABASE_URL="sqlite:///./test.db"
+                ./venv/bin/pytest test_api.py --junitxml=reports/result.xml --cov=. --cov-report=xml:reports/coverage.xml
+                rm -f test.db
+                '''
+            }
+        }
 
         stage('Build image') {
             steps {
