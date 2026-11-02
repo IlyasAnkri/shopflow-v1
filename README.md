@@ -92,3 +92,20 @@ docker compose logs -f api
 
 # Lire les logs du reverse proxy
 docker compose logs -f nginx
+
+# Infrastructure CI/CD ShopFlow
+
+Ce dépôt intègre une chaîne d'Intégration Continue (CI) automatisée définie dans le `Jenkinsfile` à la racine.
+
+**Le pipeline exécute les tâches suivantes à chaque Push :**
+1. Création de l'environnement et exécution des tests unitaires (`pytest`).
+2. Analyse statique du code et de la couverture via **SonarQube**.
+3. Validation par une **Quality Gate** (échec du pipeline si la couverture baisse).
+4. Conteneurisation de l'API via **Docker**.
+5. Livraison automatique de l'image finale sur **Docker Hub**.
+
+**Résultat du Pipeline Jenkins :**
+![Pipeline Jenkins](images/jenkins-pipeline.png)
+
+**Rapport d'analyse SonarQube :**
+![Rapport SonarQube](images/sonarqube-report.png)
