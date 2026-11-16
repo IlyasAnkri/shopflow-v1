@@ -1,0 +1,35 @@
+name: Terraform CI
+
+# Le workflow se déclenche à chaque push ou création de Pull Request sur la branche principale
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  terraform:
+    name: 'Analyse et Validation Terraform'
+    runs-on: ubuntu-latest # Le serveur temporaire prêté par GitHub
+
+    # Indique à GitHub où se trouve votre code Terraform
+    defaults:
+      run:
+        working-directory: ./infra/terraform
+
+    steps:
+    - name: 📥 Récupération du code
+      uses: actions/checkout@v4
+
+    - name: 🛠️ Installation de Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: ⚙️ Initialisation (Sans AWS S3)
+      run: terraform init -backend=false
+
+    - name: 🔎 Vérification du formatage (fmt)
+      # L'option -check fait échouer le pipeline si le code est mal formaté
+      run: terraform fmt -check -recursive
+
+    - name: ✅ Validation de la syntaxe (validate)
+      run: terraform validate
