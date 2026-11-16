@@ -92,6 +92,7 @@ docker compose logs -f api
 
 # Lire les logs du reverse proxy
 docker compose logs -f nginx
+```
 
 # Infrastructure CI/CD ShopFlow
 
